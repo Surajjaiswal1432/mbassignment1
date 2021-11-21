@@ -2,17 +2,18 @@ package com.mbassignment.service.impl;
 
 import java.util.List;
 
-import javax.validation.Valid;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
 
 import com.mbassignment.dao.EmployeeDao;
+import com.mbassignment.dao.ManagerDao;
 import com.mbassignment.model.Employee;
 import com.mbassignment.model.Manager;
 import com.mbassignment.service.EmployeeService;
@@ -25,9 +26,18 @@ public class EmployeeServiceImpl implements EmployeeService {
 	@Autowired
 	private EmployeeDao dao;
 
+	@Autowired
+	private ManagerDao managerDao;
+
 	@Override
 	public Employee saveRecored(Employee employee) {
 
+		Authentication authentication1 = SecurityContextHolder.getContext().getAuthentication();
+
+		String currentuser = authentication1.getName();
+
+		Manager manager = managerDao.findByEmail(currentuser);
+		employee.setManager(manager);
 		return dao.saveRecored(employee);
 	}
 

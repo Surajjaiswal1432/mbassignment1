@@ -1,10 +1,16 @@
 package com.mbassignment.model;
 
+import java.util.List;
+
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.OneToMany;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
@@ -12,7 +18,7 @@ import javax.validation.constraints.Pattern;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
-import com.mbassignment.service.ManagerService;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 public class Manager {
@@ -48,6 +54,11 @@ public class Manager {
 
 	@NotBlank(message = "Company can not be empty")
 	private String company;
+
+	@JsonIgnore
+	@OneToMany(cascade = CascadeType.PERSIST)
+	@JoinTable(name = "employees", joinColumns = @JoinColumn(name = "id"), inverseJoinColumns = @JoinColumn(name = "emp_id"))
+	private List<Employee> employee;
 
 	public int getId() {
 		return id;

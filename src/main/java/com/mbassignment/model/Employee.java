@@ -1,15 +1,21 @@
 package com.mbassignment.model;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
 import org.springframework.format.annotation.DateTimeFormat;
+
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 public class Employee {
@@ -39,6 +45,11 @@ public class Employee {
 
 	@NotBlank(message = "Address can not be empty")
 	private String address;
+	
+	@JsonIgnore
+	@ManyToOne(cascade = CascadeType.ALL)
+	@JoinColumn(name = "id")
+	private Manager manager;
 
 	public int getEmpId() {
 		return empId;
@@ -94,6 +105,15 @@ public class Employee {
 
 	public void setAddress(String address) {
 		this.address = address;
+	}
+
+	
+	public Manager getManager() {
+		return manager;
+	}
+
+	public void setManager(Manager manager) {
+		this.manager = manager;
 	}
 
 	@Override
